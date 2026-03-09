@@ -4,10 +4,10 @@
 </div>
 
 <div align="center">
-  <img src="https://img.shields.io/github/stars/xuhu0115/diy-llm?style=flat&logo=github" alt="GitHub stars"/>
-  <img src="https://img.shields.io/github/forks/xuhu0115/diy-llm?style=flat&logo=github" alt="GitHub forks"/>
+  <img src="https://img.shields.io/github/stars/datawhalechina/diy-llm?style=flat&logo=github" alt="GitHub stars"/>
+  <img src="https://img.shields.io/github/forks/datawhalechina/diy-llm?style=flat&logo=github" alt="GitHub forks"/>
   <img src="https://img.shields.io/badge/language-Chinese-brightgreen?style=flat" alt="Language"/>
-  <a href="https://github.com/xuhu0115/diy-llm"><img src="https://img.shields.io/badge/GitHub-Project-blue?style=flat&logo=github" alt="GitHub Project"></a>
+  <a href="https://github.com/datawhalechina/diy-llm"><img src="https://img.shields.io/badge/GitHub-Project-blue?style=flat&logo=github" alt="GitHub Project"></a>
 </div>
 
 <div align="center">
@@ -82,7 +82,7 @@
 
 ```bash
 # 克隆仓库
-git clone https://github.com/xuhu0115/diy-llm.git
+git clone https://github.com/datawhalechina/diy-llm.git
 cd CS336-Chinese-co-construction
 # 安装基础依赖（根据具体作业需求安装）
 ```
@@ -126,7 +126,7 @@ CS336-Chinese-co-construction/
 
 ## 🔗 相关链接
 
-- **仓库地址**：https://github.com/xuhu0115/diy-llm
+- **仓库地址**：https://github.com/datawhalechina/diy-llm
 - **在线阅读地址**：https://datawhalechina.github.io/diy-llm/
 - **原版课程主页**：[Stanford CS336 (Spring 2025)](https://stanford-cs336.github.io/spring2025/)
 - **原版课程项目**：https://github.com/stanford-cs336/spring2025-lectures/tree/main
@@ -177,7 +177,7 @@ CS336-Chinese-co-construction/
 
 ### 如何贡献
 
-1. **报告问题**：如果发现文档错误、代码bug或改进建议，欢迎提交 [Issue](https://github.com/xuhu0115/diy-llm/issues)
+1. **报告问题**：如果发现文档错误、代码bug或改进建议，欢迎提交 [Issue](https://github.com/datawhalechina/diy-llm/issues)
 2. **提交代码**：Fork 本仓库，创建你的特性分支，提交更改后发起 Pull Request
 3. **完善文档**：帮助改进文档、翻译内容或添加示例
 4. **分享经验**：在讨论区分享学习心得和实践经验
@@ -193,7 +193,7 @@ CS336-Chinese-co-construction/
 
 ## 📝 更新日志
 
-项目持续更新中，最新进展请查看 [GitHub Releases](https://github.com/xuhu0115/diy-llm/releases) 或提交记录。
+项目持续更新中，最新进展请查看 [GitHub Releases](https://github.com/datawhalechina/diy-llm/releases) 或提交记录。
 
 ## 📄 许可证
 
@@ -212,7 +212,7 @@ CS336-Chinese-co-construction/
 
 如果这个项目对你有帮助，欢迎给个 Star ⭐️！
 
-[![Star History Chart](https://api.star-history.com/svg?repos=xuhu0115/diy-llm&type=Date)](https://star-history.com/#xuhu0115/diy-llm&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=datawhalechina/diy-llm&type=Date)](https://star-history.com/#datawhalechina/diy-llm&Date)
 
 ---
 
