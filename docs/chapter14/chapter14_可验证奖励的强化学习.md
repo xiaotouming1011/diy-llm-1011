@@ -185,7 +185,7 @@ $$
 
 <div align="center">
    <img src="images/14-0-ppo算法流程图.png" />
-   <p>图14.1 ppo算法流程图</p>
+   <p>图14.0 ppo算法流程图</p>
 </div>
 
 流程以一个用户查询 x 开始，旧策略模型（**Policy LM**），根据输入 x 生成响应序列 $y_1, y_2, ..., y_{t-1}$。将(x,y)分解成**状态-动作对$(s_t, a_t)$**。在语言模型中：
@@ -995,15 +995,15 @@ Kimi-k1.5 在性能上与“o1”大致相当，甚至可能更优:
 其他有趣的结果：
 
 <div align="center">
-   <img src="images/14-22-Kimi-k1.5的长思维链结果.png" />
+   <img src="images/14-22-Kimi-k1.5模型在不同基准测试上的训练准确率和长度的变化.png" />
    <p>图14.22 Kimi-k1.5的长思维链结果</p>
 </div>
 
 #### 消融实验
 
 <div align="center">
-   <img src="images/14-23-和ReST用于策略梯度优化的比较.png" />
-   <p>图14.22 和ReST用于策略梯度优化的比较</p>
+   <img src="images/14-23-Kimi-k1.5和ReST用于策略梯度优化的比较.png" />
+   <p>图14.23 Kimi-k1.5和ReST用于策略梯度优化的比较</p>
 </div>
 
 > 注意，上述分数来自一个内部的 long-cot 模型，其模型尺寸远小于 k1.5 long-CoT 模型
@@ -1068,7 +1068,7 @@ Qwen3 的后训练流程精心设计了两个核心目标：
 
 <div align="center">
    <img src="images/14-28-Qwen3-32B在不同阶段的性能.png" />
-   <p>图14.27 Qwen3-32B在不同阶段的性能</p>
+   <p>图14.28 Qwen3-32B在不同阶段的性能</p>
 </div>
 
 需要注意的是，以通用为目的的 RLHF 对数学/STEM 能力会略有下降。
