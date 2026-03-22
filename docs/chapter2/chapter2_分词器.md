@@ -143,7 +143,7 @@ def clean_punctuation(text: str) -> str:
     return text
 ```
 
-[ 数据脱敏处理完整代码.py ](https://github.com/datawhalechina/diy-llm/blob/main/docs/chapter2/%E6%95%B0%E6%8D%AE%E8%84%B1%E6%95%8F%E5%A4%84%E7%90%86%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81.py)  
+[ 数据脱敏处理完整代码](https://github.com/datawhalechina/diy-llm/blob/main/docs/chapter2/de_identified_data_processing.py)  
 
 处理前
       
@@ -637,7 +637,7 @@ class BPETokenizer:
         return new_tokens
    ```
 
-[BPE、字符级、字节级的分词器效果对比.py](https://github.com/1iyouzhen/CS336-Chinese-co-construction/blob/main/docs/chapter2/BPE%E3%80%81%E5%AD%97%E7%AC%A6%E7%BA%A7%E3%80%81%E5%AD%97%E8%8A%82%E7%BA%A7%E7%9A%84%E5%88%86%E8%AF%8D%E5%99%A8%E6%95%88%E6%9E%9C%E5%AF%B9%E6%AF%94.py)
+[BPE、字符级、字节级的分词器效果对比](https://github.com/1iyouzhen/CS336-Chinese-co-construction/blob/main/docs/chapter2/BPE_character_byte_level_word_segmentation_Comparison.py)
 
 输入
 > Hello, 🌍! 你好!

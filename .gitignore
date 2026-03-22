@@ -3,6 +3,7 @@ coursework/assignment5-alignment/cs336_alignment/demo.md
 coursework/assignment5-alignment/cs336_alignment/evaluate_base_model.py
 coursework/assignment5-alignment/cs336_alignment/grpo_v1.py
 coursework/assignment5-alignment/cs336_alignment/upload_wandb.sh
+revise_advise.md
 
 # Ignore specific directories
 coursework/assignment5-alignment/cs336_alignment/old/
