@@ -83,9 +83,9 @@ source .venv/bin/activate
 
 本节对应讲义中的各个大题，给出“直接能跑”的脚本入口，方便你做作业与复现实验。*如果你没有那么多资源从头复现，但是又想要看下结果，我们也提供了实验记录可直接访问：*
 
-- SFT 实验记录：[https://wandb.ai/xuhu0115-sju/cs336-a5-sft-v3?nw=nwuserxuhu0115](https://wandb.ai/xuhu0115-sju/cs336-a5-sft-v3/reports/SFT---VmlldzoxNjMyNzcwMQ?accessToken=m394f64hkl5x8w0jl009n2ei6rj840zr6xnhtoa1jbp89xmvvvxz2o5yskggr5kp)
-- SFT_EI 实验记录：[https://wandb.ai/xuhu0115-sju/cs336-a5-sft-ei?nw=nwuserxuhu0115](https://wandb.ai/xuhu0115-sju/cs336-a5-sft-ei/reports/SFT_EI---VmlldzoxNjMyNzc4NQ)
-- GRPO 实验记录：[https://wandb.ai/xuhu0115-sju/cs336-a5-grpo?nw=nwuserxuhu0115](https://wandb.ai/xuhu0115-sju/cs336-a5-grpo/reports/GRPO---VmlldzoxNjMyNzU2Nw?accessToken=nrc0axnuk9qmovpv9kb4o5vfgshek2emf7bzo03llwywkdppnuzpvwlv4gp9693s)
+- SFT 实验记录：https://wandb.ai/xuhu0115-sju/cs336-a5-sft-v3/reports/SFT---VmlldzoxNjMyNzcwMQ?accessToken=m394f64hkl5x8w0jl009n2ei6rj840zr6xnhtoa1jbp89xmvvvxz2o5yskggr5kp
+- SFT_EI 实验记录：https://wandb.ai/xuhu0115-sju/cs336-a5-sft-ei/reports/SFT_EI---VmlldzoxNjMyNzc4NQ
+- GRPO 实验记录：https://wandb.ai/xuhu0115-sju/cs336-a5-grpo/reports/GRPO---VmlldzoxNjMyNzU2Nw?accessToken=nrc0axnuk9qmovpv9kb4o5vfgshek2emf7bzo03llwywkdppnuzpvwlv4gp9693s
 
 所有的内容讲解和结果分析都在`README.ipynb`，不知道从哪里开始的可以直接跳到这！
 
