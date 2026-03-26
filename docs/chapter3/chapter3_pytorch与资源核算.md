@@ -13,9 +13,9 @@
 
 ## 3.1 为什么需要资源核算？
 
-在训练大型语言模型时，资源消耗直接转化为成本和时间。让我们通过两个实际问题来理解其重要性：
+在训练大型语言模型时，资源消耗直接转化为时间和成本。让我们通过两个实际问题来理解其重要性：
 
-#### 3.1.1 场景一：时间估算
+### 3.1.1 场景一：时间估算
 
 > **问题：** 假设你是一个 AI 工程师，老板问你：“在 1024 张 H100 显卡上，训练一个 70B（700亿参数）的模型，数据量是 15T（15万亿 tokens），大概要多久？”
 
@@ -213,7 +213,7 @@ assert y.size() == torch.Size([16, 2])
 
 <div align="center">
    <img src="https://raw.githubusercontent.com/datawhalechina/diy-llm/main/docs/chapter3/images/3-4-矩阵乘法.png" />
-   <p>图3.3 剪枝方法介绍</p>
+   <p>图3.4 矩阵乘法</p>
  </div>
 
 - `batch` 标签指向堆叠起来的多个矩形，代表一个批次中包含的多个样本。
@@ -324,7 +324,7 @@ w: Float[torch.Tensor, "hidden1 hidden2"] = torch.ones(4, 4)
 现在你想对 hidden1 做矩阵乘法，但当前维度是扁平的，我们需要对其进行**维度拆分**（flatten → multi-dim）：
 
 ```
-# 拆分 total_hidde n为 heads 和 hidden1
+# 拆分 total_hidden为 heads 和 hidden1
 x = rearrange(x, "... (heads hidden1) -> ... heads hidden1", heads=2)
 ```
 (heads hidden1) 表示“这两个维度被乘在一起，现在我要拆开它”。因为 8 可以拆成 (2,4), (4,2), (8,1) 等，所以必须指定 heads=2 用来固定拆分后的维度。
@@ -713,24 +713,33 @@ loss = h2.pow(2).mean()  # 计算损失（均方误差）
 - w1.grad = d(loss) / d(w1) （第一层权重的梯度）
 - w2.grad = d(loss) / d(w2) （第二层权重的梯度）
 
-让我们重点分析 w2.grad 的计算，根据链式法则：
-```
-w2.grad[j,k] = sum_i h1[i,j] * h2.grad[i,k]
-```
-这本质上是一个矩阵乘法，h1 的形状是 (B, D)，h2.grad 的形状是 (B, K)，它们的乘积 h1.T @ h2.grad 的形状是 (D, K)，正好是 w2.grad 的形状。因此，计算 w2.grad 的 FLOPs 为：**2 * B * D * K**
+让我们重点分析 w2.grad 的计算，根据链式法则（$h_{2} = h_{1} W_{2}$，故 $\frac{\partial L}{\partial W_2} = h_1^{\mathsf{T}}\frac{\partial L}{\partial h_2}$）：
 
-为了继续反向传播到 w1，我们还需要计算 h1.grad。根据链式法则：
-```
-h1.grad[i, j] = sum_k w2[j, k] * h2.grad[i, k]
-```
+$$
+\frac{\partial L}{\partial W_{2}[j,k]} = \sum_{i} h_{1}[i,j]\,\frac{\partial L}{\partial h_{2}[i,k]}
+$$
 
-这同样是一个矩阵乘法，w2 的形状是 (D, K)，h2.grad 的形状是 (B, K)。它们的乘积 h2.grad @ w2.T 的形状是 (B, D)，正好是 h1.grad 的形状。因此，计算 h1.grad 的 FLOPs 也是：**2 * B * D * K**
+其中 $i$ 为 batch 维下标（与上文 $h_1$ 的行对应）。与 PyTorch 一致地记 ${h2.grad}[i,k]=\partial L/\partial h_{2}[i,k]$ ，即 ${w2.grad}[j,k]=\sum_i {h1}[i,j]\cdot{h2.grad}[i,k]$ ，等价于矩阵形式 ${w2.grad} = {h1}^{\mathsf{T}} @ {h2.grad}$ 。
 
-同理，计算 w1.grad 的公式是：
-```
-w1.grad[j, k] = sum_i x[i, j] * h1.grad[i, k]
-```
-这又是一个矩阵乘法，其 FLOPs 为：**2 * B * D * D**
+这本质上是一个矩阵乘法：$h_{1}$ 的形状是 $(B, D)$，$h_{2}.grad$ 的形状是 $(B, K)$，$h_{1}^{T} @ {h_{2}.grad}$ 的形状是 $(D, K)$，正好是 ${w2.grad}$ 的形状。因此，计算 ${w2.grad}$ 的 FLOPs 为：**2 × B × D × K**
+
+为了将梯度继续传回第一层（随后才能算 ${w1.grad}$），需要先求 $\partial L/\partial h_1$。由 $h_2 = h_1 W_2$ 对 $h_1$ 求导得 $\frac{\partial L}{\partial h_1} = \frac{\partial L}{\partial h_2} W_2^{\mathsf{T}}$：
+
+$$
+\frac{\partial L}{\partial h_{1}[i,j]} = \sum_{k} \frac{\partial L}{\partial h_{2}[i,k]}\, W_{2}[j,k]
+$$
+
+其中 $k$ 为输出维下标。记 PyTorch 的 ${h1.grad}$、 ${h2.grad}$ 即上式左、右端的 $\partial L/\partial h_1$、 $\partial L/\partial h_2$ ，则元素形式为 ${h1.grad}[i,j]=\sum_k {h2.grad}[i,k]\cdot{w2}[j,k]$，矩阵形式为 ${h1.grad} = {h2.grad} @ {w2}^{\mathsf{T}}$。
+
+${w2}$ 的形状是 $(D, K)$， ${h2.grad}$ 的形状是 $(B, K)$，故 ${h2.grad} @ {w2}^{\mathsf{T}}$ 为 $(B, D)$，与 ${h1.grad}$ 一致。计算 ${h1.grad}$ 的 FLOPs 也是：**2 × B × D × K**。
+
+同理，第一层 $h_1 = x\, W_1$ 对 $W_1$ 的梯度为 $\frac{\partial L}{\partial W_1} = x^{\mathsf{T}}\frac{\partial L}{\partial h_1}$：
+
+$$
+\frac{\partial L}{\partial W_{1}[j,k]} = \sum_{i} x[i,j]\,\frac{\partial L}{\partial h_{1}[i,k]}
+$$
+
+即 ${w1.grad}[j,k]=\sum_i x[i,j]\cdot{h1.grad}[i,k]$，矩阵形式 ${w1.grad} = x^{T} @ {h1.grad}$。其 FLOPs 为：**2 × B × D × D**。
 
 将这个过程[可视化](https://medium.com/@dzmitrybahdanau/the-flops-calculus-of-language-model-training-3b19c1f025e4)：
 
@@ -773,7 +782,7 @@ output = x @ w # 输出向量
 ```
 当 input_dim = 16384 时，输出值的大小约为 18.9，这是一个非常大的数值。这种大数值会逐层放大，导致梯度爆炸（gradient explosion），使训练过程变得极不稳定，甚至无法收敛。
 
-为了克服这个问题，我们需要一种对输入维度 input_dim 不敏感的初始化方法。解决方法是使用 **Xavier (Kaiming) 初始化**([paper](https://proceedings.mlr.press/v9/glorot10a/glorot10a.pdf))。通过除以 $\sqrt{\text{输入维度}}$ 来缩放权重，保持数值稳定性。
+为了克服这个问题，我们需要一种对输入维度 input_dim 不敏感的初始化方法。解决方法是使用 **Xavier初始化**([paper](https://proceedings.mlr.press/v9/glorot10a/glorot10a.pdf) [stackexchange社区](https://ai.stackexchange.com/questions/30491/is-there-a-proper-initialization-technique-for-the-weight-matrices-in-multi-head))。通过除以 $\sqrt{\text{输入维度}}$ 来缩放权重，保持数值稳定性。
 
 ```python
 w = nn.Parameter(torch.randn(input_dim, output_dim) / np.sqrt(input_dim))
@@ -939,7 +948,7 @@ assert x.size() == torch.Size([B, L]) # 验证输出张量的形状
 
 接下来，我们详细看下`get_batch` 函数的内部处理逻辑：
 
-```
+```python
 def get_batch(data: np.array, batch_size: int, sequence_length: int, device: str) -> torch.Tensor:
     # 随机采样起始位置
     start_indices = torch.randint(len(data) - sequence_length, (batch_size,)) # 使用 torch.randint 在 [0, len(data) - sequence_length] 范围内随机生成 batch_size 个起始索引。这样可以确保每个序列都能完整地从数据中截取出来，不会越界
@@ -951,7 +960,7 @@ def get_batch(data: np.array, batch_size: int, sequence_length: int, device: str
 
     # 固定内存（Pinned Memory）优化
     if torch.cuda.is_available():
-    x = x.pin_memory()
+        x = x.pin_memory()
 
     # 异步数据传输
     x = x.to(device, non_blocking=True) 
@@ -1146,7 +1155,7 @@ def train(name: str, get_batch,
 
     # 初始化模型和优化器
     model = Cruncher(dim=D, num_layers=0).to(get_device())
-    optimizer = SGD(model.parameters(), lr=0.01)
+    optimizer = SGD(model.parameters(), lr=lr)
 
     # 主训练循环
     for t in range(num_train_steps): # 循环执行 num_train_steps 次，每次迭代称为一个“训练步”
